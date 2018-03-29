@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">StudyBuddies</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="button_search">Suchen</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="nav_action_main">Suche</string>
+    <string name="nav_action_learngroup">Meine Lerngruppen</string>
+
+    <string name="studyprogram_prompt">Wähle deinen Studiengang aus</string>
+    <string-array name="studyprograms">
+        <item>Informatik (AI)</item>
+        <item>Medieninformatik (MI)</item>
+        <item>Wirtschaftsinformatik (WI)</item>
+    </string-array>
+</resources>
