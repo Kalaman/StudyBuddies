@@ -99,7 +99,7 @@ INSERT INTO StudyProgramCourse VALUES (2,3); # Medieninformatik -> CGA
 INSERT INTO StudyProgramCourse VALUES (3,4); # Wirtschaftsinformatik -> PuL
 
 INSERT INTO Student VALUES ("Kalaman",5,1,"Bald haben wir es geschafft. Nur noch 2 Wochen :)","0173123456789");
-INSERT INTO Student VALUES ("Maclachlan",5,1,"","0172987654321");
+INSERT INTO Student VALUES ("Maclachlan",5,1,"Hat jemand noch Probeklausuren?","0172987654321");
 
 INSERT INTO Learngroup VALUES (1,"Maclachlan",2,STR_TO_DATE('2018-06-28 11:30:00','%Y-%m-%d %H:%i:%s'),2,"Lust auf Algorithmik ?","Hey Leute, ich suche noch 3 fleißige Studenten die Lust haben mit mir Algorithmik zu lernen. Wäre gut wenn ihr mindestens im 3. Semester seid",4);
 INSERT INTO Learngroup VALUES (2,"Kalaman",1,STR_TO_DATE('2018-06-20 09:30:00','%Y-%m-%d %H:%i:%s'),6,"AP1 durchlernen","Ihr müsst auch für AP1 lernen ? Dann seid ihr in dieser Gruppe richtig. Wir haben vor mind 6 Stunden am Tag zu lernen! Ich freue mich auf euch",6);
