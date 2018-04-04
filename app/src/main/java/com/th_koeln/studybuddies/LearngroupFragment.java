@@ -67,7 +67,7 @@ public class LearngroupFragment extends Fragment implements DatabaseActions.DBRe
         else{
             textViewEmptyResult.setVisibility(View.GONE);
             recyclerView.setVisibility(View.VISIBLE);
-            recyclerView.setAdapter(new LearngroupRecyclerAdapter(arrayList));
+            recyclerView.setAdapter(new LearngroupRecyclerAdapter(arrayList,false));
         }
     }
 }
