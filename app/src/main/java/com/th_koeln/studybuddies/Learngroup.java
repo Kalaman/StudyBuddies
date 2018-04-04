@@ -13,8 +13,11 @@ public class Learngroup {
     String studentCount;
     String course;
     String campus;
+    String lid;
 
-    public Learngroup(String title, String description, String datetime, String location, String maxstudent, String course, String campus, String studentCount) {
+
+    public Learngroup(String lid, String title, String description, String datetime, String location, String maxstudent, String course, String campus, String studentCount) {
+        this.lid = lid;
         this.title = title;
         this.description = description;
         this.datetime = datetime;
@@ -23,6 +26,15 @@ public class Learngroup {
         this.course = course;
         this.campus = campus;
         this.studentCount = studentCount;
+    }
+
+
+    public String getLid() {
+        return lid;
+    }
+
+    public void setLid(String lid) {
+        this.lid = lid;
     }
 
     public String getTitle() {
