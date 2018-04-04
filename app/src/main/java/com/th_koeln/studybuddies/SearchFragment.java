@@ -66,7 +66,8 @@ public class SearchFragment extends Fragment implements DatabaseActions.DBReques
                 databaseActions.getLearngroups(getContext(),new DatabaseActions.DBRequestListener() {
                     @Override
                     public void onDBRequestFinished(String response) {
-                        recyclerViewResults.setAdapter(new LearngroupRecyclerAdapter(Utilities.parseLearngroups(response)));
+                        LearngroupRecyclerAdapter lra = new LearngroupRecyclerAdapter(Utilities.parseLearngroups(response),true);
+                        recyclerViewResults.setAdapter(lra);
                         if (recyclerViewResults.getAdapter().getItemCount() > 0)
                             showResultLayout(true);
                         else
