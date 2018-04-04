@@ -19,7 +19,8 @@ public class Utilities {
 
             for (int i=0;i<jsonArray.length();++i) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                learngroups.add(new Learngroup(jsonObject.getString("Title"),
+                learngroups.add(new Learngroup(jsonObject.getString("LID"),
+                        jsonObject.getString("Title"),
                         jsonObject.getString("Description"),
                         jsonObject.getString("Meetingtime"),
                         jsonObject.getString("Location"),
@@ -30,6 +31,24 @@ public class Utilities {
             }
 
             return learngroups;
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public static Student parseStudent (String response) {
+
+        try{
+            JSONObject jsonObject = new JSONArray(response).getJSONObject(0);
+
+            return new Student(jsonObject.getString("Student"),
+                    jsonObject.getInt("Semester"),
+                    jsonObject.getInt("StudyProgramID"),
+                    jsonObject.getString("Description"),
+                    jsonObject.getString("Phone"));
 
         }catch (Exception e){
             e.printStackTrace();
