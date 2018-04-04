@@ -97,6 +97,9 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_my_learngroups:
                 fragment = new LearngroupFragment();
                 break;
+            case R.id.nav_profile:
+                fragment = new ProfileFragment();
+                break;
         }
 
         if (fragment != null) {
