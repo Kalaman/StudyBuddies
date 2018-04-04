@@ -21,10 +21,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="150dp"
-            app:StartSearchTintColor="@color/colorPrimary"
-            app:DoneSearchTintColor="@color/colorPrimary"
-            app:RevealViewBackgroundColor="@color/colorPrimary"
-            app:SearchViewBackgroundColor="@android:color/secondary_text_dark"
             app:ShowBorders="false"
             app:RevealEmptyText="Kurs auswählen"
             app:SpinnerExpandHeight="300dp"/>

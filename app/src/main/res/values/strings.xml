@@ -9,6 +9,7 @@
     <string name="action_settings">Settings</string>
     <string name="nav_action_main">Suche</string>
     <string name="nav_action_learngroup">Meine Lerngruppen</string>
+    <string name="nav_action_profile">Profil</string>
 
     <string name="studyprogram_prompt">Wähle deinen Studiengang aus</string>
     <string-array name="studyprograms">
@@ -16,4 +17,7 @@
         <item>Medieninformatik (MI)</item>
         <item>Wirtschaftsinformatik (WI)</item>
     </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -12,6 +12,10 @@
             android:id="@+id/nav_my_learngroups"
             android:icon="@drawable/ic_school_black_24dp"
             android:title="@string/nav_action_learngroup" />
+        <item
+            android:id="@+id/nav_profile"
+            android:icon="@drawable/ic_person_black_24dp"
+            android:title="@string/nav_action_profile" />
 
     </group>
 
