@@ -28,6 +28,10 @@ import java.util.ArrayList;
 import static com.th_koeln.studybuddies.MainActivity.databaseActions;
 import static com.th_koeln.studybuddies.MainActivity.studentName;
 
+/**
+ * Created by alasdair on 03.04.18.
+ */
+
 public class ProfileFragment extends Fragment implements DatabaseActions.DBRequestListener{
 
     Button saveChanges;
@@ -43,6 +47,9 @@ public class ProfileFragment extends Fragment implements DatabaseActions.DBReque
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_profile,container,false);
+
+        ((MainActivity) getActivity()).setActionBarTitle("Profil");
+
         name = (TextView) v.findViewById(R.id.textViewName);
         description = (TextView) v.findViewById(R.id.textViewName2);
         saveChanges = (Button) v.findViewById(R.id.saveChanges);
