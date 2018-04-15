@@ -6,8 +6,10 @@ package com.th_koeln.studybuddies;
 
 public class Learngroup {
     String title;
+    String creator;
     String description;
-    String datetime;
+    String datetimeFrom;
+    String datetimeTo;
     String location;
     String maxstudent;
     String studentCount;
@@ -16,25 +18,39 @@ public class Learngroup {
     String lid;
 
 
-    public Learngroup(String lid, String title, String description, String datetime, String location, String maxstudent, String course, String campus, String studentCount) {
+
+
+    public Learngroup(String lid, String title, String description, String datetimeFrom, String datetimeTo, String location, String maxstudent, String course, String campus, String studentCount) {
         this.lid = lid;
         this.title = title;
         this.description = description;
-        this.datetime = datetime;
+        this.datetimeFrom = datetimeFrom;
         this.location = location;
         this.maxstudent = maxstudent;
         this.course = course;
         this.campus = campus;
         this.studentCount = studentCount;
+        this.datetimeTo = datetimeTo;
+
     }
 
 
-    public String getLid() {
-        return lid;
-    }
+    public String getLid() { return lid; }
 
     public void setLid(String lid) {
         this.lid = lid;
+    }
+
+    public String getDatetimeFrom() { return datetimeFrom; }
+
+    public void setDatetimeFrom(String from) {
+        this.datetimeFrom = from.substring(8,10) + "." + from.substring(5,7) + "." +
+                from.substring(0,4) + from.substring(10,16);
+    }
+
+    public void setDatetimeTo(String to) {
+        this.datetimeTo = to.substring(8,10) + "." + to.substring(5,7) + "." +
+                to.substring(0,4) + to.substring(10,16);
     }
 
     public String getTitle() {
@@ -53,8 +69,8 @@ public class Learngroup {
         this.description = description;
     }
 
-    public String getDatetime() {
-        return datetime;
+    public String getDatetimeTo() {
+        return datetimeTo;
     }
 
     public String getLocation() {
@@ -75,5 +91,9 @@ public class Learngroup {
 
     public String getStudentCount() {
         return studentCount;
+    }
+
+    public String getFormattedDateTimeFrom() {
+        return datetimeFrom.substring(6,10) + "-" + datetimeFrom.substring(3,5) + "-" + datetimeFrom.substring(0,2) + " " + datetimeFrom.substring(11,16) + ":00";
     }
 }
