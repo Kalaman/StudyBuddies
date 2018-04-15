@@ -22,7 +22,8 @@ public class Utilities {
                 learngroups.add(new Learngroup(jsonObject.getString("LID"),
                         jsonObject.getString("Title"),
                         jsonObject.getString("Description"),
-                        jsonObject.getString("Meetingtime"),
+                        jsonObject.getString("MeetingtimeFrom"),
+                        jsonObject.getString("MeetingtimeTo"),
                         jsonObject.getString("Location"),
                         jsonObject.getString("MaxStudentCount"),
                         jsonObject.getString("Course"),
@@ -54,6 +55,18 @@ public class Utilities {
             e.printStackTrace();
         }
 
+        return null;
+    }
+
+    /*
+        Finds a learngroup with a given lid out of an array
+     */
+
+    public static Learngroup findLearngroup(ArrayList<Learngroup> learngroups, String lid){
+        for (Learngroup learngroup : learngroups) {
+            if (lid.equals(learngroup.getLid()))
+                return learngroup;
+        }
         return null;
     }
 }
