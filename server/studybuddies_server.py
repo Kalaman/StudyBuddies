@@ -4,14 +4,14 @@ import mysql.connector
 import hashlib
 import datetime
 
-cnx = mysql.connector.connect(user='web', database='studybuddies')
+cnx = mysql.connector.connect(user='root', database='studybuddies')
 cursor = cnx.cursor()
 
 app = Flask(__name__)
 
 @app.route('/student/', methods=['POST'])
 def editProfile():
-    cnx = mysql.connector.connect(user='web', database='studybuddies')
+    cnx = mysql.connector.connect(user='root', database='studybuddies')
     cursor = cnx.cursor()
 
     studentname = request.form['studentname']
@@ -29,7 +29,7 @@ def editProfile():
 
 @app.route('/register/', methods=['POST'])
 def registerStudent():
-    cnx = mysql.connector.connect(user='web', database='studybuddies')
+    cnx = mysql.connector.connect(user='root', database='studybuddies')
     cursor = cnx.cursor()
 
     studentname = request.form['studentname']
@@ -50,7 +50,7 @@ def registerStudent():
 
 @app.route('/learngroup/', methods=['POST'])
 def createLearngroup():
-    cnx = mysql.connector.connect(user='web', database='studybuddies')
+    cnx = mysql.connector.connect(user='root', database='studybuddies')
     cursor = cnx.cursor()
 
     title = request.form['title']
@@ -77,7 +77,7 @@ def createLearngroup():
 @app.route('/session/', methods=['POST'])
 def editSession():
 
-    cnx = mysql.connector.connect(user='web', database='studybuddies')
+    cnx = mysql.connector.connect(user='root', database='studybuddies')
     cursor = cnx.cursor()
 
     courseid = request.form['courseid']
@@ -101,7 +101,7 @@ def editSession():
 
 @app.route('/learngroup/join/', methods=['POST'])
 def joinLearngroup():
-    cnx = mysql.connector.connect(user='web', database='studybuddies')
+    cnx = mysql.connector.connect(user='root', database='studybuddies')
     cursor = cnx.cursor()
 
     lid = request.form['lid']
@@ -121,7 +121,7 @@ def joinLearngroup():
 
 @app.route('/learngroup/leave/', methods=['POST'])
 def leaveLearngroup():
-    cnx = mysql.connector.connect(user='web', database='studybuddies')
+    cnx = mysql.connector.connect(user='root', database='studybuddies')
     cursor = cnx.cursor()
 
     lid = request.form['lid']
@@ -136,7 +136,7 @@ def leaveLearngroup():
 
 @app.route('/student/', methods=['GET'])
 def getProfile():
-    cnx = mysql.connector.connect(user='web', database='studybuddies')
+    cnx = mysql.connector.connect(user='root', database='studybuddies')
     cursor = cnx.cursor()
 
     studentname = request.values.get("name");
@@ -161,7 +161,7 @@ def getProfile():
 
 @app.route('/learngroup/', methods=['GET'])
 def getLearngroups():
-    cnx = mysql.connector.connect(user='web', database='studybuddies')
+    cnx = mysql.connector.connect(user='root', database='studybuddies')
     cursor = cnx.cursor()
 
     courseid = request.values.get("courseid");
@@ -194,7 +194,7 @@ def getLearngroups():
 
 @app.route('/learngroup/<studentname>', methods=['GET'])
 def getLearngroupsForStudent(studentname):
-    cnx = mysql.connector.connect(user='web', database='studybuddies')
+    cnx = mysql.connector.connect(user='root', database='studybuddies')
     cursor = cnx.cursor()
 
     cursor.execute("SELECT l.LID,l.Creator,DATE_FORMAT(l.MeetingtimeFrom, '%%d.%%m.%%Y %%H:%%i'),DATE_FORMAT(l.MeetingtimeTo, '%%d.%%m.%%Y %%H:%%i'),mp.Name,l.Title,l.Description,l.MaxStudentCount,c.Name,cp.Name,Count(sl.LID) FROM Learngroup l INNER JOIN MeetingPoint mp ON l.MeetingPointID = mp.MPID INNER JOIN Course c ON l.CID = c.CID INNER JOIN Campus cp ON mp.CPID = cp.CPID INNER JOIN StudentLearngroup sl ON l.LID = sl.LID WHERE sl.LID IN (SELECT LID FROM StudentLearngroup sl WHERE sl.Fullname = '%s') GROUP BY sl.LID ORDER BY l.MeetingtimeFrom;" % (studentname))
@@ -220,7 +220,7 @@ def getLearngroupsForStudent(studentname):
 
 @app.route('/learngroup/<lid>/meetingpoint/', methods=['GET'])
 def getMeetingpoint(lid):
-    cnx = mysql.connector.connect(user='web', database='studybuddies')
+    cnx = mysql.connector.connect(user='root', database='studybuddies')
     cursor = cnx.cursor()
 
     cursor.execute("SELECT Campus.CPID, MPID, MeetingPoint.Name AS MeetingPoint, Campus.Name AS Campus FROM MeetingPoint,Campus WHERE MPID = (SELECT MeetingPointID FROM Learngroup WHERE LID = '%s') AND Campus.CPID = MeetingPoint.CPID;" % (lid))
