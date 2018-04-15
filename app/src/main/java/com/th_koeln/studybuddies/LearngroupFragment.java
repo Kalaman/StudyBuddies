@@ -34,7 +34,7 @@ public class LearngroupFragment extends Fragment implements DatabaseActions.DBRe
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_learngroups,container,false);
-
+        ((MainActivity) getActivity()).setActionBarTitle("Meine Lerngruppen");
         recyclerView = (RecyclerView)v.findViewById(R.id.recyclerViewMyLearngroups);
         swipeRefreshLayout = (SwipeRefreshLayout)v.findViewById(R.id.swipeRefresh);
         textViewEmptyResult = (TextView)v.findViewById(R.id.textViewEmptyResult);
@@ -67,7 +67,7 @@ public class LearngroupFragment extends Fragment implements DatabaseActions.DBRe
         else{
             textViewEmptyResult.setVisibility(View.GONE);
             recyclerView.setVisibility(View.VISIBLE);
-            recyclerView.setAdapter(new LearngroupRecyclerAdapter(arrayList,false));
+            recyclerView.setAdapter(new LearngroupRecyclerAdapter(arrayList,false, getActivity()));
         }
     }
 }
