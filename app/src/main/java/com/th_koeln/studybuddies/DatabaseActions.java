@@ -24,6 +24,7 @@ public class DatabaseActions {
     private static final String DATABASE_URL_LEARNGROUPS = "http://"+ DATABASE_IP + "/learngroup/";
     private static final String DATABASE_URL_REGISTER= "http://"+ DATABASE_IP + "/register/";
     private static final String DATABASE_URL_STUDENT= "http://"+ DATABASE_IP + "/student/";
+    private static final String DATABASE_URL_SESSION= "http://"+ DATABASE_IP + "/session/";
 
     public interface DBRequestListener {
         public void onDBRequestFinished(String response);
@@ -49,6 +50,10 @@ public class DatabaseActions {
         return null;
     }
 
+    public ArrayList<Learngroup> getMeetingpoint(Context context,DBRequestListener listener,String lid,boolean showProgressDialog) {
+        new AsyncDatabaseGET(context,DATABASE_URL_LEARNGROUPS + lid + "/meetingpoint/",listener,showProgressDialog).execute();
+        return null;
+    }
 
     public ArrayList<Learngroup> registerUser(Context context,DBRequestListener listener,String studentname,String semester, int studyProgramID,boolean showProgressDialog) {
         String [] formDataKey = new String[] {"studentname","semester","studentprogram"};
@@ -65,10 +70,24 @@ public class DatabaseActions {
         return null;
     }
 
+    public ArrayList<Learngroup> editSession(Context context, DBRequestListener listener, String lid, String meetingTimeFrom, String meetingTimeTo, String action, boolean showProgressDialog){
+        String [] formDataKey = new String[] {"courseid","meetingTimeFrom","meetingTimeTo","action"};
+        String [] formDataValue = new String[] {lid, meetingTimeFrom,meetingTimeTo,action};
+        new AsyncDatabasePOST(context,DATABASE_URL_SESSION,listener,formDataKey,formDataValue,showProgressDialog).execute();
+        return null;
+    }
+
     public ArrayList<Learngroup> joinGroup(Context context, DBRequestListener listener, String studentname, String lid, boolean showProgressDialog){
         String [] formDataKey = new String[] {"lid","studentname"};
         String [] formDataValue = new String[] {lid,studentname};
         new AsyncDatabasePOST(context,DATABASE_URL_LEARNGROUPS+"join/",listener,formDataKey,formDataValue,showProgressDialog).execute();
+        return null;
+    }
+
+    public ArrayList<Learngroup> leaveGroup(Context context, DBRequestListener listener, String studentname, String lid, boolean showProgressDialog){
+        String [] formDataKey = new String[] {"lid","studentname"};
+        String [] formDataValue = new String[] {lid,studentname};
+        new AsyncDatabasePOST(context,DATABASE_URL_LEARNGROUPS+"leave/",listener,formDataKey,formDataValue,showProgressDialog).execute();
         return null;
     }
 

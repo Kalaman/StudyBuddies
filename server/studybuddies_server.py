@@ -4,14 +4,14 @@ import mysql.connector
 import hashlib
 import datetime
 
-cnx = mysql.connector.connect(user='root', database='studybuddies')
+cnx = mysql.connector.connect(user='web', database='studybuddies')
 cursor = cnx.cursor()
 
 app = Flask(__name__)
 
 @app.route('/student/', methods=['POST'])
 def editProfile():
-    cnx = mysql.connector.connect(user='root', database='studybuddies')
+    cnx = mysql.connector.connect(user='web', database='studybuddies')
     cursor = cnx.cursor()
 
     studentname = request.form['studentname']
@@ -29,7 +29,7 @@ def editProfile():
 
 @app.route('/register/', methods=['POST'])
 def registerStudent():
-    cnx = mysql.connector.connect(user='root', database='studybuddies')
+    cnx = mysql.connector.connect(user='web', database='studybuddies')
     cursor = cnx.cursor()
 
     studentname = request.form['studentname']
@@ -50,7 +50,7 @@ def registerStudent():
 
 @app.route('/learngroup/', methods=['POST'])
 def createLearngroup():
-    cnx = mysql.connector.connect(user='root', database='studybuddies')
+    cnx = mysql.connector.connect(user='web', database='studybuddies')
     cursor = cnx.cursor()
 
     title = request.form['title']
@@ -74,10 +74,34 @@ def createLearngroup():
         return jsonify({'success':1,'message':'Lerngruppe konnte nicht erstellt werden','error':str(e)});
     return jsonify({'success':0,'message':'Neue Lerngruppe wurde erstellt'})
 
+@app.route('/session/', methods=['POST'])
+def editSession():
+
+    cnx = mysql.connector.connect(user='web', database='studybuddies')
+    cursor = cnx.cursor()
+
+    courseid = request.form['courseid']
+    action = request.form['action']
+
+    try:
+        meetingtimestampFrom = datetime.datetime.strptime(request.form['meetingTimeFrom'],'%Y-%m-%d %H:%M:%S')
+    except ValueError as verr:
+        return jsonify({'success':1,'message':'Datumformat wurde nicht eingehalten'});
+    try:
+        meetingtimestampTo = datetime.datetime.strptime(request.form['meetingTimeTo'],'%Y-%m-%d %H:%M:%S')
+    except ValueError as verr:
+        return jsonify({'success':1,'message':'Datumformat wurde nicht eingehalten'});
+
+    try:
+        cursor.execute("UPDATE Learngroup SET MeetingtimeFrom = '%s', MeetingtimeTo = '%s' WHERE LID = '%s'" % (meetingtimestampFrom,meetingtimestampTo,courseid))
+        cnx.commit()
+    except mysql.connector.Error as e:
+        return jsonify({'success':1,'message':'Session konnte nicht übernommen werden','error':str(e)});
+    return jsonify({'success':0,'message':'Session übernommen','action':action})
 
 @app.route('/learngroup/join/', methods=['POST'])
 def joinLearngroup():
-    cnx = mysql.connector.connect(user='root', database='studybuddies')
+    cnx = mysql.connector.connect(user='web', database='studybuddies')
     cursor = cnx.cursor()
 
     lid = request.form['lid']
@@ -95,9 +119,24 @@ def joinLearngroup():
             return jsonify({'success':1,'message':'Konnte Lerngruppe nicht beitreten'});
     return jsonify({'success':0,'message':'Lerngruppe beigetreten'})
 
+@app.route('/learngroup/leave/', methods=['POST'])
+def leaveLearngroup():
+    cnx = mysql.connector.connect(user='web', database='studybuddies')
+    cursor = cnx.cursor()
+
+    lid = request.form['lid']
+    studentname = request.form['studentname']
+
+    try:
+        cursor.execute("DELETE FROM StudentLearngroup WHERE Fullname = '%s' AND LID = '%s'" % (studentname,lid))
+        cnx.commit()
+    except mysql.connector.Error as e:
+        return jsonify({'success':1,'message':'Konnte Lerngruppe nicht verlassen'});
+    return jsonify({'success':0,'message':'Lerngruppe erfolgreich verlassen'})
+
 @app.route('/student/', methods=['GET'])
 def getProfile():
-    cnx = mysql.connector.connect(user='root', database='studybuddies')
+    cnx = mysql.connector.connect(user='web', database='studybuddies')
     cursor = cnx.cursor()
 
     studentname = request.values.get("name");
@@ -122,22 +161,23 @@ def getProfile():
 
 @app.route('/learngroup/', methods=['GET'])
 def getLearngroups():
-    cnx = mysql.connector.connect(user='root', database='studybuddies')
+    cnx = mysql.connector.connect(user='web', database='studybuddies')
     cursor = cnx.cursor()
 
     courseid = request.values.get("courseid");
-
+    print("ok")
     if courseid != None:
-        query = "SELECT l.LID,l.Creator,DATE_FORMAT(l.Meetingtime, '%%d.%%l.%%Y %%H:%%i'),mp.Name,l.Title,l.Description,l.MaxStudentCount,c.Name,cp.Name,Count(sl.LID) FROM Learngroup l INNER JOIN MeetingPoint mp ON l.MeetingPointID = mp.MPID INNER JOIN Course c ON l.CID = c.CID INNER JOIN Campus cp ON mp.CPID = cp.CPID INNER JOIN StudentLearngroup sl ON l.LID = sl.LID WHERE l.Meetingtime >= NOW() AND l.CID = %s GROUP BY sl.LID ORDER BY l.Meetingtime" % courseid;
+        query = "SELECT l.LID,l.Creator,DATE_FORMAT(l.MeetingtimeFrom, '%%d.%%m.%%Y %%H:%%i'),DATE_FORMAT(l.MeetingtimeTo, '%%d.%%m.%%Y %%H:%%i'),mp.Name,l.Title,l.Description,l.MaxStudentCount,c.Name,cp.Name,Count(sl.LID) FROM Learngroup l INNER JOIN MeetingPoint mp ON l.MeetingPointID = mp.MPID INNER JOIN Course c ON l.CID = c.CID INNER JOIN Campus cp ON mp.CPID = cp.CPID INNER JOIN StudentLearngroup sl ON l.LID = sl.LID AND l.CID = %s GROUP BY sl.LID ORDER BY l.MeetingtimeFrom" % courseid;
     else:
-        query = "SELECT l.LID,l.Creator,DATE_FORMAT(l.Meetingtime, '%d.%l.%Y %H:%i'),mp.Name,l.Title,l.Description,l.MaxStudentCount,c.Name,cp.Name,Count(sl.LID) FROM Learngroup l INNER JOIN MeetingPoint mp ON l.MeetingPointID = mp.MPID INNER JOIN Course c ON l.CID = c.CID INNER JOIN Campus cp ON mp.CPID = cp.CPID INNER JOIN StudentLearngroup sl ON l.LID = sl.LID WHERE l.Meetingtime >= NOW() GROUP BY sl.LID ORDER BY l.Meetingtime";
+        query = "SELECT l.LID,l.Creator,DATE_FORMAT(l.MeetingtimeFrom, '%d.%m.%Y %H:%i'),DATE_FORMAT(l.MeetingtimeTo, '%d.%m.%Y %H:%i'),mp.Name,l.Title,l.Description,l.MaxStudentCount,c.Name,cp.Name,Count(sl.LID) FROM Learngroup l INNER JOIN MeetingPoint mp ON l.MeetingPointID = mp.MPID INNER JOIN Course c ON l.CID = c.CID INNER JOIN Campus cp ON mp.CPID = cp.CPID INNER JOIN StudentLearngroup sl ON l.LID = sl.LID GROUP BY sl.LID ORDER BY l.MeetingtimeFrom";
     cursor.execute(query)
     response = []
-    for (LID,Creator,Meetingtime,location,Title,Description,MaxStudentCount,CourseName,Campus,ParticipantsCount) in cursor:
+    for (LID,Creator,MeetingtimeFrom,MeetingtimeTo,location,Title,Description,MaxStudentCount,CourseName,Campus,ParticipantsCount) in cursor:
         jsonStr = {
             'LID' : LID,
             'Creator' : Creator,
-            'Meetingtime' : Meetingtime,
+            'MeetingtimeFrom' : MeetingtimeFrom,
+            'MeetingtimeTo' : MeetingtimeTo,
             'Location' : location,
             'Title' : Title,
             'Description' : Description,
@@ -146,6 +186,7 @@ def getLearngroups():
             'Campus': Campus,
             'StudentCount': ParticipantsCount
         }
+        print(LID)
         response.append(jsonStr)
 
     return jsonify(response)
@@ -153,17 +194,18 @@ def getLearngroups():
 
 @app.route('/learngroup/<studentname>', methods=['GET'])
 def getLearngroupsForStudent(studentname):
-    cnx = mysql.connector.connect(user='root', database='studybuddies')
+    cnx = mysql.connector.connect(user='web', database='studybuddies')
     cursor = cnx.cursor()
 
-    cursor.execute("SELECT l.LID,l.Creator,DATE_FORMAT(l.Meetingtime, '%%d.%%l.%%Y %%H:%%i'),mp.Name,l.Title,l.Description,l.MaxStudentCount,c.Name,cp.Name,Count(sl.LID) FROM Learngroup l INNER JOIN MeetingPoint mp ON l.MeetingPointID = mp.MPID INNER JOIN Course c ON l.CID = c.CID INNER JOIN Campus cp ON mp.CPID = cp.CPID INNER JOIN StudentLearngroup sl ON l.LID = sl.LID WHERE sl.LID IN (SELECT LID FROM StudentLearngroup sl WHERE sl.Fullname = '%s') GROUP BY sl.LID ORDER BY l.Meetingtime;" % (studentname))
+    cursor.execute("SELECT l.LID,l.Creator,DATE_FORMAT(l.MeetingtimeFrom, '%%d.%%m.%%Y %%H:%%i'),DATE_FORMAT(l.MeetingtimeTo, '%%d.%%m.%%Y %%H:%%i'),mp.Name,l.Title,l.Description,l.MaxStudentCount,c.Name,cp.Name,Count(sl.LID) FROM Learngroup l INNER JOIN MeetingPoint mp ON l.MeetingPointID = mp.MPID INNER JOIN Course c ON l.CID = c.CID INNER JOIN Campus cp ON mp.CPID = cp.CPID INNER JOIN StudentLearngroup sl ON l.LID = sl.LID WHERE sl.LID IN (SELECT LID FROM StudentLearngroup sl WHERE sl.Fullname = '%s') GROUP BY sl.LID ORDER BY l.MeetingtimeFrom;" % (studentname))
 
     response = []
-    for (LID,Creator,Meetingtime,location,Title,Description,MaxStudentCount,CourseName,Campus,ParticipantsCount) in cursor:
+    for (LID,Creator,MeetingtimeFrom,MeetingtimeTo,location,Title,Description,MaxStudentCount,CourseName,Campus,ParticipantsCount) in cursor:
         jsonStr = {
             'LID' : LID,
             'Creator' : Creator,
-            'Meetingtime' : Meetingtime,
+            'MeetingtimeFrom' : MeetingtimeFrom,
+            'MeetingtimeTo' : MeetingtimeTo,
             'Location' : location,
             'Title' : Title,
             'Description' : Description,
@@ -176,9 +218,29 @@ def getLearngroupsForStudent(studentname):
 
     return jsonify(response)
 
+@app.route('/learngroup/<lid>/meetingpoint/', methods=['GET'])
+def getMeetingpoint(lid):
+    cnx = mysql.connector.connect(user='web', database='studybuddies')
+    cursor = cnx.cursor()
+
+    cursor.execute("SELECT Campus.CPID, MPID, MeetingPoint.Name AS MeetingPoint, Campus.Name AS Campus FROM MeetingPoint,Campus WHERE MPID = (SELECT MeetingPointID FROM Learngroup WHERE LID = '%s') AND Campus.CPID = MeetingPoint.CPID;" % (lid))
+    response = []
+    for (CPID,MPID,MeetingPoint,Campus) in cursor:
+        jsonStr = {
+            'CPID' : CPID,
+            'MPID' : MPID,
+            'MeetingPoint' : MeetingPoint,
+            'Campus' : Campus,
+        }
+        response.append(jsonStr)
+
+    return jsonify(response)
 
 cursor.close()
 cnx.close()
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0')
+    app.run(
+    host="0.0.0.0",
+    port=5000
+)
