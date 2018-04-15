@@ -38,7 +38,7 @@ public class SearchFragment extends Fragment implements DatabaseActions.DBReques
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_search,container,false);
-
+        ((MainActivity) getActivity()).setActionBarTitle("Suche");
         linearLayoutSearch = (LinearLayout)v.findViewById(R.id.linearLayoutSearch);
         linearLayoutResults = (LinearLayout)v.findViewById(R.id.linearLayoutResult);
 
@@ -66,7 +66,7 @@ public class SearchFragment extends Fragment implements DatabaseActions.DBReques
                 databaseActions.getLearngroups(getContext(),new DatabaseActions.DBRequestListener() {
                     @Override
                     public void onDBRequestFinished(String response) {
-                        LearngroupRecyclerAdapter lra = new LearngroupRecyclerAdapter(Utilities.parseLearngroups(response),true);
+                        LearngroupRecyclerAdapter lra = new LearngroupRecyclerAdapter(Utilities.parseLearngroups(response),true, getActivity());
                         recyclerViewResults.setAdapter(lra);
                         if (recyclerViewResults.getAdapter().getItemCount() > 0)
                             showResultLayout(true);
