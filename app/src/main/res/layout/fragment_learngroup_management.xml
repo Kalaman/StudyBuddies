@@ -1,0 +1,214 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.th_koeln.studybuddies.LearngroupManagementFragment"
+    android:id="@+id/fragment_learngroup"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:id="@+id/imageViewLearngroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:src="@drawable/learngroup" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="10dp">
+
+        <TextView
+            android:id="@+id/textViewLearnsession"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="30dp"
+            android:textColor="#FFFFFF"
+            android:text="Nächste Lernsession" />
+
+        <LinearLayout
+            android:id="@+id/layoutLoction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textViewLearnsession"
+            android:layout_marginTop="2dp">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="5dp"
+                android:tint="#FFFFFF"
+                android:src="@drawable/ic_place_black_24dp"/>
+
+            <TextView
+                android:id="@+id/textViewLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#FFFFFF"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="Container" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:layout_below="@id/layoutLoction"
+            android:gravity="center_horizontal"
+            android:layout_weight="1">
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="5dp"
+                android:tint="#FFFFFF"
+                android:src="@drawable/ic_access_time_black_24dp"/>
+            <TextView
+                android:id="@+id/textViewDatetime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:textSize="20dp"
+                android:text="12.12.2019 12:31"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageViewLearngroup"
+        android:padding="10dp"
+        android:orientation="vertical"
+        android:id="@+id/linearLayout">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp">
+
+            <ImageView
+                android:id="@+id/imageGroupMember"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:src="@drawable/no_profile_pic" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:src="@drawable/no_profile_pic" />
+
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginVertical="3dp"
+            android:background="@android:color/darker_gray"/>
+
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/linearLayout"
+        android:padding="10dp"
+        android:layout_marginBottom="70dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true">
+
+            <RelativeLayout
+                android:id="@+id/sessionButtons"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="20dp">
+
+                <mehdi.sakout.fancybuttons.FancyButton
+                    android:id="@+id/buttonSessionNew"
+                    android:layout_width="200dp"
+                    android:layout_height="50dp"
+                    android:layout_centerHorizontal="true"
+                    android:alpha="1"
+                    android:paddingBottom="7dp"
+                    android:paddingTop="7dp"
+                    android:visibility="gone"
+                    fancy:fb_defaultColor="@color/colorThViolett"
+                    fancy:fb_focusColor="@color/colorThViolett"
+                    fancy:fb_iconPosition="left"
+                    fancy:fb_radius="30dp"
+                    fancy:fb_text="Neue Session starten"
+                    fancy:fb_textColor="#FFFFFFFF" >
+                </mehdi.sakout.fancybuttons.FancyButton>
+
+                <mehdi.sakout.fancybuttons.FancyButton
+                    android:id="@+id/buttonSessionCancel"
+                    android:layout_width="200dp"
+                    android:layout_height="50dp"
+                    android:layout_centerHorizontal="true"
+                    android:alpha="1"
+                    android:paddingBottom="7dp"
+                    android:paddingTop="7dp"
+                    fancy:fb_defaultColor="@color/colorThRed"
+                    fancy:fb_focusColor="@color/colorThRed"
+                    fancy:fb_iconPosition="left"
+                    fancy:fb_radius="30dp"
+                    fancy:fb_text="Session beenden"
+                    fancy:fb_textColor="#FFFFFFFF" >
+                </mehdi.sakout.fancybuttons.FancyButton>
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/textTimeRemaining"
+                android:layout_below="@id/sessionButtons"
+                android:layout_centerHorizontal="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="30dp"
+                android:paddingTop="5dp"
+                android:layout_marginTop="30dp"
+                android:layout_weight="1"
+                android:text="31:25" />
+
+            <TextView
+                android:id="@+id/textTimeRemainingSub"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/textTimeRemaining"
+                android:layout_centerHorizontal="true"
+                android:text="verbleibend" />
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/edit_learngroup"
+        android:visibility="visible"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/edit" />
+
+    <Button
+        android:id="@+id/leave_learngroup"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/leave"
+        android:visibility="visible" />
+
+</RelativeLayout>
