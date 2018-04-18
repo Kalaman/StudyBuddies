@@ -54,7 +54,6 @@ public class LearngroupRecyclerAdapter extends RecyclerView.Adapter<LearngroupRe
             });
         }
 
-
         holder.lid = currentLearngroup.getLid();
         holder.textViewTitle.setText(currentLearngroup.getTitle());
         holder.textViewDescription.setText(currentLearngroup.getDescription());

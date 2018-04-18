@@ -1,8 +1,10 @@
 package com.th_koeln.studybuddies;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,6 +14,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.th_koeln.studybuddies.LearngroupCreation.LearngroupCreatorActivity;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -29,6 +33,7 @@ public class LearngroupFragment extends Fragment implements DatabaseActions.DBRe
     RecyclerView recyclerView;
     SwipeRefreshLayout swipeRefreshLayout;
     TextView textViewEmptyResult;
+    FloatingActionButton btnCreateLearngroup;
 
     @Nullable
     @Override
@@ -38,6 +43,7 @@ public class LearngroupFragment extends Fragment implements DatabaseActions.DBRe
         recyclerView = (RecyclerView)v.findViewById(R.id.recyclerViewMyLearngroups);
         swipeRefreshLayout = (SwipeRefreshLayout)v.findViewById(R.id.swipeRefresh);
         textViewEmptyResult = (TextView)v.findViewById(R.id.textViewEmptyResult);
+        btnCreateLearngroup = (FloatingActionButton)v.findViewById(R.id.fabButtonCreateLearngroup);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         databaseActions.getUserLearngroups(getContext(),LearngroupFragment.this,true);
@@ -48,6 +54,15 @@ public class LearngroupFragment extends Fragment implements DatabaseActions.DBRe
             public void onRefresh() {
                 DatabaseActions databaseActions = new DatabaseActions();
                 databaseActions.getUserLearngroups(getContext(),LearngroupFragment.this,false);
+            }
+        });
+
+        btnCreateLearngroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), LearngroupCreatorActivity.class);
+                startActivity(intent);
+                getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
         });
 

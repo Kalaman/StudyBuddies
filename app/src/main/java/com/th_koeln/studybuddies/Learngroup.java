@@ -17,9 +17,6 @@ public class Learngroup {
     String campus;
     String lid;
 
-
-
-
     public Learngroup(String lid, String title, String description, String datetimeFrom, String datetimeTo, String location, String maxstudent, String course, String campus, String studentCount) {
         this.lid = lid;
         this.title = title;
@@ -33,7 +30,6 @@ public class Learngroup {
         this.datetimeTo = datetimeTo;
 
     }
-
 
     public String getLid() { return lid; }
 
