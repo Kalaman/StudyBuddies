@@ -76,6 +76,7 @@ INSERT INTO MeetingPoint VALUES ("",1,"Container");
 INSERT INTO MeetingPoint VALUES ("",1,"Bibliothek");
 INSERT INTO MeetingPoint VALUES ("",1,"Eingang Mensa");
 INSERT INTO MeetingPoint VALUES ("",1,"Eingang Ferchau Gebäude");
+INSERT INTO MeetingPoint VALUES ("",1,"Lernraum 2105");
 
 #Meetingpoints for Campus Deutz
 INSERT INTO MeetingPoint VALUES ("",2,"Bibliothek");
