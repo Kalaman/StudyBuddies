@@ -134,6 +134,24 @@ def leaveLearngroup():
         return jsonify({'success':1,'message':'Konnte Lerngruppe nicht verlassen'});
     return jsonify({'success':0,'message':'Lerngruppe erfolgreich verlassen'})
 
+@app.route('/learngroup/edit/', methods=['POST'])
+def editLearngroup():
+    cnx = mysql.connector.connect(user='web', database='studybuddies')
+    cursor = cnx.cursor()
+
+    lid = request.form['lid']
+    title = request.form['title']
+    description = request.form['description']
+    cid = request.form['cid']
+    mpid = request.form['mpid']
+
+    try:
+        cursor.execute("UPDATE Learngroup SET Title = '%s',Description='%s',CID='%s',MeetingPointID='%s' WHERE LID = '%s';" % (title,description,cid,mpid,lid))
+        cnx.commit()
+    except mysql.connector.Error as e:
+        return jsonify({'success':1,'message':'Konnte Lerngruppe nicht editieren'});
+    return jsonify({'success':0,'message':'Lerngruppe erfolgreich editiert'})
+
 @app.route('/student/', methods=['GET'])
 def getProfile():
     cnx = mysql.connector.connect(user='web', database='studybuddies')
@@ -218,21 +236,36 @@ def getLearngroupsForStudent(studentname):
 
     return jsonify(response)
 
-@app.route('/learngroup/<lid>/meetingpoint/', methods=['GET'])
+@app.route('/learngroup/<lid>/meetingpoints/', methods=['GET'])
 def getMeetingpoint(lid):
     cnx = mysql.connector.connect(user='web', database='studybuddies')
     cursor = cnx.cursor()
 
-    cursor.execute("SELECT Campus.CPID, MPID, MeetingPoint.Name AS MeetingPoint, Campus.Name AS Campus FROM MeetingPoint,Campus WHERE MPID = (SELECT MeetingPointID FROM Learngroup WHERE LID = '%s') AND Campus.CPID = MeetingPoint.CPID;" % (lid))
-    response = []
-    for (CPID,MPID,MeetingPoint,Campus) in cursor:
+    meetingpoints = []
+
+    cursor.execute("SELECT Campus.CPID, MPID, Campus.Name AS Campus, MeetingPoint.Name AS MeetingPoint FROM MeetingPoint,Campus WHERE Campus.CPID = MeetingPoint.CPID;")
+    for (CPID,MPID,Campus,MeetingPoint) in cursor:
         jsonStr = {
             'CPID' : CPID,
             'MPID' : MPID,
-            'MeetingPoint' : MeetingPoint,
             'Campus' : Campus,
+            'MeetingPoint' : MeetingPoint
+        }
+        meetingpoints.append(jsonStr)
+
+    cursor.execute("SELECT Campus.CPID, MPID FROM MeetingPoint,Campus WHERE MPID = (SELECT MeetingPointID FROM Learngroup WHERE LID = '%s') AND Campus.CPID = MeetingPoint.CPID;" % (lid))
+    response = []
+
+    for (CPID, MPID) in cursor:
+        jsonStr = {
+            'CPID' : CPID,
+            'MPID' : MPID,
+            'Campus' : Campus,
+            'MeetingPoint' : MeetingPoint,
+            'MeetingPoints' : meetingpoints
         }
         response.append(jsonStr)
+
 
     return jsonify(response)
 
