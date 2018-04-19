@@ -4,14 +4,14 @@ import mysql.connector
 import hashlib
 import datetime
 
-cnx = mysql.connector.connect(user='root', database='studybuddies')
+cnx = mysql.connector.connect(user='web', database='studybuddies')
 cursor = cnx.cursor()
 
 app = Flask(__name__)
 
 @app.route('/student/', methods=['POST'])
 def editProfile():
-    cnx = mysql.connector.connect(user='root', database='studybuddies')
+    cnx = mysql.connector.connect(user='web', database='studybuddies')
     cursor = cnx.cursor()
 
     studentname = request.form['studentname']
@@ -29,7 +29,7 @@ def editProfile():
 
 @app.route('/register/', methods=['POST'])
 def registerStudent():
-    cnx = mysql.connector.connect(user='root', database='studybuddies')
+    cnx = mysql.connector.connect(user='web', database='studybuddies')
     cursor = cnx.cursor()
 
     studentname = request.form['studentname']
@@ -50,7 +50,7 @@ def registerStudent():
 
 @app.route('/learngroup/', methods=['POST'])
 def createLearngroup():
-    cnx = mysql.connector.connect(user='root', database='studybuddies')
+    cnx = mysql.connector.connect(user='web', database='studybuddies')
     cursor = cnx.cursor()
 
     title = request.form['title']
@@ -59,7 +59,12 @@ def createLearngroup():
     courseid = request.form['courseid']
 
     try:
-        meetingtimestamp = datetime.datetime.strptime(request.form['meetingtime'],'%Y-%m-%d %H:%M:%S')
+        meetingtimestampFrom = datetime.datetime.strptime(request.form['meetingTimeTo'],'%Y-%m-%d %H:%M:%S')
+    except ValueError as verr:
+        return jsonify({'success':1,'message':'Datumformat wurde nicht eingehalten'});
+
+    try:
+        meetingtimestampTo = datetime.datetime.strptime(request.form['meetingTimeFrom'],'%Y-%m-%d %H:%M:%S')
     except ValueError as verr:
         return jsonify({'success':1,'message':'Datumformat wurde nicht eingehalten'});
 
@@ -67,7 +72,7 @@ def createLearngroup():
     maxstudentcount = request.form['maxstudentcount']
 
     try:
-        cursor.execute("INSERT INTO Learngroup VALUES ('','%s','%s','%s','%s','%s','%s','%s')" % (creator,courseid,meetingtimestamp,meetingpointid,title,description,maxstudentcount))
+        cursor.execute("INSERT INTO Learngroup VALUES ('','%s','%s','%s','%s','%s','%s','%s','%s')" % (creator,courseid,meetingtimestampFrom,meetingtimestampTo,meetingpointid,title,description,maxstudentcount))
         cursor.execute("INSERT INTO StudentLearngroup VALUES ('%s','%s')" % (creator,cursor.lastrowid))
         cnx.commit()
     except mysql.connector.Error as e:
@@ -77,7 +82,7 @@ def createLearngroup():
 @app.route('/session/', methods=['POST'])
 def editSession():
 
-    cnx = mysql.connector.connect(user='root', database='studybuddies')
+    cnx = mysql.connector.connect(user='web', database='studybuddies')
     cursor = cnx.cursor()
 
     courseid = request.form['courseid']
@@ -101,7 +106,7 @@ def editSession():
 
 @app.route('/learngroup/join/', methods=['POST'])
 def joinLearngroup():
-    cnx = mysql.connector.connect(user='root', database='studybuddies')
+    cnx = mysql.connector.connect(user='web', database='studybuddies')
     cursor = cnx.cursor()
 
     lid = request.form['lid']
@@ -121,7 +126,7 @@ def joinLearngroup():
 
 @app.route('/learngroup/leave/', methods=['POST'])
 def leaveLearngroup():
-    cnx = mysql.connector.connect(user='root', database='studybuddies')
+    cnx = mysql.connector.connect(user='web', database='studybuddies')
     cursor = cnx.cursor()
 
     lid = request.form['lid']
@@ -154,7 +159,7 @@ def editLearngroup():
 
 @app.route('/student/', methods=['GET'])
 def getProfile():
-    cnx = mysql.connector.connect(user='root', database='studybuddies')
+    cnx = mysql.connector.connect(user='web', database='studybuddies')
     cursor = cnx.cursor()
 
     studentname = request.values.get("name");
@@ -179,7 +184,7 @@ def getProfile():
 
 @app.route('/learngroup/', methods=['GET'])
 def getLearngroups():
-    cnx = mysql.connector.connect(user='root', database='studybuddies')
+    cnx = mysql.connector.connect(user='web', database='studybuddies')
     cursor = cnx.cursor()
 
     courseid = request.values.get("courseid");
@@ -212,7 +217,7 @@ def getLearngroups():
 
 @app.route('/learngroup/<studentname>', methods=['GET'])
 def getLearngroupsForStudent(studentname):
-    cnx = mysql.connector.connect(user='root', database='studybuddies')
+    cnx = mysql.connector.connect(user='web', database='studybuddies')
     cursor = cnx.cursor()
 
     cursor.execute("SELECT l.LID,l.Creator,DATE_FORMAT(l.MeetingtimeFrom, '%%d.%%m.%%Y %%H:%%i'),DATE_FORMAT(l.MeetingtimeTo, '%%d.%%m.%%Y %%H:%%i'),mp.Name,l.Title,l.Description,l.MaxStudentCount,c.Name,cp.Name,Count(sl.LID) FROM Learngroup l INNER JOIN MeetingPoint mp ON l.MeetingPointID = mp.MPID INNER JOIN Course c ON l.CID = c.CID INNER JOIN Campus cp ON mp.CPID = cp.CPID INNER JOIN StudentLearngroup sl ON l.LID = sl.LID WHERE sl.LID IN (SELECT LID FROM StudentLearngroup sl WHERE sl.Fullname = '%s') GROUP BY sl.LID ORDER BY l.MeetingtimeFrom;" % (studentname))
@@ -238,7 +243,7 @@ def getLearngroupsForStudent(studentname):
 
 @app.route('/learngroup/<lid>/meetingpoints/', methods=['GET'])
 def getMeetingpoint(lid):
-    cnx = mysql.connector.connect(user='root', database='studybuddies')
+    cnx = mysql.connector.connect(user='web', database='studybuddies')
     cursor = cnx.cursor()
 
     meetingpoints = []

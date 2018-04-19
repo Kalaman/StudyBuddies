@@ -15,18 +15,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -54,8 +59,10 @@ public class LearngroupManagementFragment extends Fragment implements DatabaseAc
     private Button leaveGroup, editGroup;
     private long difference;
     private String date, timeStart, timeEnd;
-    CountDownTimer countDownTimer;
-
+    private MeetingPoint meetingPoint;
+    private CountDownTimer countDownTimer;
+    private Spinner campusSpinner, meetingPointSpinner;
+    private ArrayList<MeetingPoint> meetingPoints;
     String meetingFrom = "2018-04-13 10:15:00",meetingTo = "2018-04-13 12:15:00";
 
     @Override
@@ -119,7 +126,6 @@ public class LearngroupManagementFragment extends Fragment implements DatabaseAc
         editGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                databaseActions.getMeetingpoint(getContext(),LearngroupManagementFragment.this,learngroup.getLid(),false);
                 final Dialog dialog = new Dialog(getContext());
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setContentView(R.layout.edit_learngroup_dialog);
@@ -128,6 +134,32 @@ public class LearngroupManagementFragment extends Fragment implements DatabaseAc
 
                 final EditText editTitle = (EditText) dialog.findViewById(R.id.edit_title);
                 final EditText editDescription = (EditText) dialog.findViewById(R.id.edit_description);
+                campusSpinner = (Spinner) dialog.findViewById(R.id.spinnerCampus);
+
+                campusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    String[] meetingpointsGummersbach = {"Container","Bibliothek","Eingang Mensa","Eingang Ferchau Gebäude"};
+                    String[] meetingpointsDeutz = {"Bibliothek","Eingang Mensa","Lernraum 1303"};
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                        ArrayAdapter<String> dataAdapter;
+                        if (i == 0) {
+                            dataAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item,meetingpointsGummersbach);
+                        } else {
+                            dataAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item,meetingpointsDeutz);
+                        }
+
+                        meetingPointSpinner.setAdapter(dataAdapter);
+                        dataAdapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
+
+                    }
+                });
+
+                meetingPointSpinner = (Spinner) dialog.findViewById(R.id.spinnerMeetingPoint);
+                databaseActions.getMeetingpoint(getContext(),LearngroupManagementFragment.this,learngroup.getLid(),false);
 
                 editTitle.setText(learngroup.getTitle());
                 editDescription.setText(learngroup.getDescription());
@@ -137,6 +169,27 @@ public class LearngroupManagementFragment extends Fragment implements DatabaseAc
                 ok.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        String mpid;
+                        if (campusSpinner.getSelectedItemPosition() == 0) {
+                            learngroup.setTitle(editTitle.getText().toString());
+                            learngroup.setDescription(editDescription.getText().toString());
+                            ((MainActivity) getActivity()).setActionBarTitle(learngroup.getTitle());
+                            mpid = String.valueOf(meetingPointSpinner.getSelectedItemPosition()+1);
+                        } else {
+                            mpid = String.valueOf(meetingPointSpinner.getSelectedItemPosition()+5);
+                        }
+
+                        databaseActions.editGroup(getContext(), new DatabaseActions.DBRequestListener() {
+                            @Override
+                            public void onDBRequestFinished(String response) {
+                                try {
+                                    JSONObject jsonObject = new JSONObject(response);
+                                    String message = jsonObject.getString("message");
+                                    int success = jsonObject.getInt("success");
+
+                                } catch (Exception e) {};
+                            }
+                        },learngroup.getLid(),editTitle.getText().toString(),editDescription.getText().toString(),String.valueOf(campusSpinner.getSelectedItemPosition()+1),mpid,true);
                         dialog.dismiss();
                     }
                 });
@@ -146,7 +199,6 @@ public class LearngroupManagementFragment extends Fragment implements DatabaseAc
                 lp.width = WindowManager.LayoutParams.MATCH_PARENT;
                 dialog.show();
                 dialog.getWindow().setAttributes(lp);
-
             }
         });
 
@@ -166,6 +218,31 @@ public class LearngroupManagementFragment extends Fragment implements DatabaseAc
     public void onDBRequestFinished(String response) {
         JSONObject jsonObject = null;
 
+        try {
+            JSONArray array = new JSONArray(response);
+            jsonObject = array.getJSONObject(0);
+            int cpid = jsonObject.getInt("CPID");
+            int mpid = jsonObject.getInt("MPID");
+            String mp = jsonObject.getString("MeetingPoint");
+            String campus = jsonObject.getString("Campus");
+            meetingPoints = Utilities.parseMeetingPoints(jsonObject.getJSONArray("MeetingPoints"));
+            meetingPoint = new MeetingPoint(cpid,mpid,campus,mp);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        if (meetingPoint != null){
+            campusSpinner.setSelection(meetingPoint.getCpid()-1);
+            String[] meetingpointsGummersbach = {"Container","Bibliothek","Eingang Mensa","Eingang Ferchau Gebäude"};
+            String[] meetingpointsDeutz = {"Bibliothek","Eingang Mensa","Lernraum 1303"};
+            ArrayAdapter<String> dataAdapter;
+            if (meetingPoint.getCpid() == 1)
+                dataAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item,meetingpointsGummersbach);
+            else
+                dataAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item,meetingpointsDeutz);
+            meetingPointSpinner.setAdapter(dataAdapter);
+            dataAdapter.notifyDataSetChanged();
+        }
 
         try {
             jsonObject = new JSONObject(response);

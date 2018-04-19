@@ -20,7 +20,8 @@ import okhttp3.Response;
 
 public class DatabaseActions {
 
-    private static final String DATABASE_IP = "192.168.178.75:5000";
+//    private static final String DATABASE_IP = "192.168.178.75:5000";
+    private static final String DATABASE_IP = "192.168.43.197:5000";
     private static final String DATABASE_URL_LEARNGROUPS = "http://"+ DATABASE_IP + "/learngroup/";
     private static final String DATABASE_URL_REGISTER= "http://"+ DATABASE_IP + "/register/";
     private static final String DATABASE_URL_STUDENT= "http://"+ DATABASE_IP + "/student/";
@@ -51,7 +52,7 @@ public class DatabaseActions {
     }
 
     public ArrayList<Learngroup> getMeetingpoint(Context context,DBRequestListener listener,String lid,boolean showProgressDialog) {
-        new AsyncDatabaseGET(context,DATABASE_URL_LEARNGROUPS + lid + "/meetingpoint/",listener,showProgressDialog).execute();
+        new AsyncDatabaseGET(context,DATABASE_URL_LEARNGROUPS + lid + "/meetingpoints/",listener,showProgressDialog).execute();
         return null;
     }
 
@@ -88,6 +89,13 @@ public class DatabaseActions {
         String [] formDataKey = new String[] {"lid","studentname"};
         String [] formDataValue = new String[] {lid,studentname};
         new AsyncDatabasePOST(context,DATABASE_URL_LEARNGROUPS+"leave/",listener,formDataKey,formDataValue,showProgressDialog).execute();
+        return null;
+    }
+
+    public ArrayList<Learngroup> editGroup(Context context, DBRequestListener listener, String lid, String title, String description, String cid, String mpid, boolean showProgressDialog){
+            String [] formDataKey = new String[] {"lid","title","description","cid","mpid"};
+        String [] formDataValue = new String[] {lid,title,description,cid,mpid};
+        new AsyncDatabasePOST(context,DATABASE_URL_LEARNGROUPS+"edit/",listener,formDataKey,formDataValue,showProgressDialog).execute();
         return null;
     }
 

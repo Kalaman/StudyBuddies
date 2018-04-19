@@ -58,6 +58,30 @@ public class Utilities {
         return null;
     }
 
+    public static ArrayList<MeetingPoint> parseMeetingPoints (JSONArray response) {
+
+        try{
+            ArrayList<MeetingPoint> meetingPoints = new ArrayList<>();
+
+            JSONArray jsonArray = response;
+
+            for (int i=0;i<jsonArray.length();++i) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                meetingPoints.add(new MeetingPoint(jsonObject.getInt("CPID"),
+                        jsonObject.getInt("MPID"),
+                        jsonObject.getString("Campus"),
+                        jsonObject.getString("MeetingPoint")));
+            }
+
+            return meetingPoints;
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     /*
         Finds a learngroup with a given lid out of an array
      */

@@ -18,6 +18,12 @@
         <item>Wirtschaftsinformatik (WI)</item>
     </string-array>
 
+    <string name="campus_prompt">Wähle deinen Campus aus</string>
+    <string-array name="campuses">
+        <item>Campus Gummersbach</item>
+        <item>Campus Deutz</item>
+    </string-array>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
