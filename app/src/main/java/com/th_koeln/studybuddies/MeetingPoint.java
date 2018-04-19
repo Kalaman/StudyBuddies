@@ -5,23 +5,12 @@ package com.th_koeln.studybuddies;
  */
 
 public class MeetingPoint {
+    private int mpid;
+    private String name;
 
-    int cpid, mpid;
-    String campus, meetingpoint;
-
-    public MeetingPoint(int cpid, int mpid, String campus, String meetingpoint) {
-        this.cpid = cpid;
+    public MeetingPoint(String name,int mpid) {
         this.mpid = mpid;
-        this.campus = campus;
-        this.meetingpoint = meetingpoint;
-    }
-
-    public int getCpid() {
-        return cpid;
-    }
-
-    public void setCpid(int cpid) {
-        this.cpid = cpid;
+        this.name = name;
     }
 
     public int getMpid() {
@@ -32,19 +21,16 @@ public class MeetingPoint {
         this.mpid = mpid;
     }
 
-    public String getCampus() {
-        return campus;
+    public String getName() {
+        return name;
     }
 
-    public void setCampus(String campus) {
-        this.campus = campus;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getMeetingpoint() {
-        return meetingpoint;
-    }
-
-    public void setMeetingpoint(String meetingpoint) {
-        this.meetingpoint = meetingpoint;
+    @Override
+    public String toString() {
+        return name;
     }
 }

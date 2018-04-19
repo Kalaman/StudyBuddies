@@ -18,6 +18,8 @@
         <item>Wirtschaftsinformatik (WI)</item>
     </string-array>
 
+    <string name="learngroupcreator_title">Neue Lerngruppe erstellen</string>
+
     <string name="campus_prompt">Wähle deinen Campus aus</string>
     <string-array name="campuses">
         <item>Campus Gummersbach</item>

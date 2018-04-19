@@ -20,8 +20,7 @@ import okhttp3.Response;
 
 public class DatabaseActions {
 
-//    private static final String DATABASE_IP = "192.168.178.75:5000";
-    private static final String DATABASE_IP = "192.168.43.197:5000";
+    private static final String DATABASE_IP = "192.168.178.75:5000";
     private static final String DATABASE_URL_LEARNGROUPS = "http://"+ DATABASE_IP + "/learngroup/";
     private static final String DATABASE_URL_REGISTER= "http://"+ DATABASE_IP + "/register/";
     private static final String DATABASE_URL_STUDENT= "http://"+ DATABASE_IP + "/student/";
@@ -75,6 +74,13 @@ public class DatabaseActions {
         String [] formDataKey = new String[] {"courseid","meetingTimeFrom","meetingTimeTo","action"};
         String [] formDataValue = new String[] {lid, meetingTimeFrom,meetingTimeTo,action};
         new AsyncDatabasePOST(context,DATABASE_URL_SESSION,listener,formDataKey,formDataValue,showProgressDialog).execute();
+        return null;
+    }
+
+    public ArrayList<Learngroup> createGroup(Context context, DBRequestListener listener, String title, String description, String creator, String courseid,String meetingTimeFrom, String meetingTimeTo, String meetingPointid, String maxStudent, boolean showProgressDialog){
+        String [] formDataKey = new String[] {"title","description","creator","courseid","meetingTimeFrom","meetingTimeTo","meetingpointid","maxstudentcount"};
+        String [] formDataValue = new String[] {title,description,creator,courseid,meetingTimeFrom,meetingTimeTo,meetingPointid,maxStudent};
+        new AsyncDatabasePOST(context,DATABASE_URL_LEARNGROUPS,listener,formDataKey,formDataValue,showProgressDialog).execute();
         return null;
     }
 
@@ -149,8 +155,7 @@ public class DatabaseActions {
     }
 
 
-    private class AsyncDatabasePOST extends AsyncTask<Void,Void,String>
-    {
+    private class AsyncDatabasePOST extends AsyncTask<Void,Void,String> {
         String url;
         Response response;
         DBRequestListener listener;
