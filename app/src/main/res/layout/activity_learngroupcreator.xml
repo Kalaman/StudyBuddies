@@ -90,11 +90,10 @@
             android:text="Kurs" />
 
         <Spinner
-            android:id="@+id/spinnerStudyprogram"
+            android:id="@+id/spinnerCourse"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="15dp"
-            android:entries="@array/studyprograms"
             android:spinnerMode="dropdown"/>
 
         <TextView
@@ -120,6 +119,22 @@
                 android:text="Keine Angaben"/>
         </LinearLayout>
 
+
+        <TextView
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            android:layout_marginLeft="5dp"
+            android:textSize="12sp"
+            android:text="Treffpunkt" />
+
+        <Spinner
+            android:id="@+id/spinnerMeetingpoints"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:spinnerMode="dropdown"/>
 
         <mehdi.sakout.fancybuttons.FancyButton
             android:id="@+id/buttonCreateLearngroup"
