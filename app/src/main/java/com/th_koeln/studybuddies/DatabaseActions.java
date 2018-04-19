@@ -20,7 +20,8 @@ import okhttp3.Response;
 
 public class DatabaseActions {
 
-    private static final String DATABASE_IP = "192.168.178.75:5000";
+//    private static final String DATABASE_IP = "192.168.178.75:5000";
+    private static final String DATABASE_IP = "192.168.43.197:5000";
     private static final String DATABASE_URL_LEARNGROUPS = "http://"+ DATABASE_IP + "/learngroup/";
     private static final String DATABASE_URL_REGISTER= "http://"+ DATABASE_IP + "/register/";
     private static final String DATABASE_URL_STUDENT= "http://"+ DATABASE_IP + "/student/";

@@ -6,11 +6,21 @@ package com.th_koeln.studybuddies;
 
 public class MeetingPoint {
     private int mpid;
+    private int cpid;
     private String name;
 
-    public MeetingPoint(String name,int mpid) {
+    public MeetingPoint(String name,int mpid, int cpid) {
         this.mpid = mpid;
         this.name = name;
+        this.cpid = cpid;
+    }
+
+    public int getCpid() {
+        return cpid;
+    }
+
+    public void setCpid(int cpid) {
+        this.cpid = cpid;
     }
 
     public int getMpid() {

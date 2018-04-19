@@ -67,10 +67,8 @@ public class Utilities {
 
             for (int i=0;i<jsonArray.length();++i) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                meetingPoints.add(new MeetingPoint(jsonObject.getInt("CPID"),
-                        jsonObject.getInt("MPID"),
-                        jsonObject.getString("Campus"),
-                        jsonObject.getString("MeetingPoint")));
+                meetingPoints.add(new MeetingPoint(jsonObject.getString("Campus"),
+                        jsonObject.getInt("MPID"),jsonObject.getInt("CPID")));
             }
 
             return meetingPoints;

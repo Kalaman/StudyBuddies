@@ -226,7 +226,7 @@ public class LearngroupManagementFragment extends Fragment implements DatabaseAc
             String mp = jsonObject.getString("MeetingPoint");
             String campus = jsonObject.getString("Campus");
             meetingPoints = Utilities.parseMeetingPoints(jsonObject.getJSONArray("MeetingPoints"));
-            meetingPoint = new MeetingPoint(cpid,mpid,campus,mp);
+            meetingPoint = new MeetingPoint(campus,mpid,cpid);
         } catch (JSONException e) {
             e.printStackTrace();
         }

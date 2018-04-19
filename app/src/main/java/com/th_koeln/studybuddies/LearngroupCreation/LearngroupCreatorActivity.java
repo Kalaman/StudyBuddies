@@ -19,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.th_koeln.studybuddies.Course;
 import com.th_koeln.studybuddies.DatabaseActions;
@@ -27,6 +28,9 @@ import com.th_koeln.studybuddies.MainActivity;
 import com.th_koeln.studybuddies.MeetingPoint;
 import com.th_koeln.studybuddies.R;
 import com.th_koeln.studybuddies.RegisterActivity;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -105,11 +109,11 @@ public class LearngroupCreatorActivity extends AppCompatActivity implements Data
 
         // Meetingpoint Drop down elements
         List<MeetingPoint> meetingPoint = new ArrayList<MeetingPoint>();
-        meetingPoint.add(new MeetingPoint("Container",1));
-        meetingPoint.add(new MeetingPoint("Bibliothek",2));
-        meetingPoint.add(new MeetingPoint("Eingang Mensa",3));
-        meetingPoint.add(new MeetingPoint("Eingang Ferchau Gebäude",4));
-        meetingPoint.add(new MeetingPoint("Lernraum 2105",5));
+        meetingPoint.add(new MeetingPoint("Container",1,1));
+        meetingPoint.add(new MeetingPoint("Bibliothek",2,1));
+        meetingPoint.add(new MeetingPoint("Eingang Mensa",3,1));
+        meetingPoint.add(new MeetingPoint("Eingang Ferchau Gebäude",4,1));
+        meetingPoint.add(new MeetingPoint("Lernraum 2105",5,1));
 
         // Creating adapter for spinner
         ArrayAdapter<Course> dataAdapter = new ArrayAdapter<Course>(this, android.R.layout.simple_spinner_item, courses);
@@ -122,6 +126,21 @@ public class LearngroupCreatorActivity extends AppCompatActivity implements Data
     @Override
     public void onDBRequestFinished(String response) {
         Log.d("LearngroupCreator",response);
+        JSONObject jsonObject = null;
+        try {
+            jsonObject = new JSONObject(response);
+            int success = jsonObject.getInt("success");
+            String message = jsonObject.getString("message");
+
+            Toast.makeText(LearngroupCreatorActivity.this,message,Toast.LENGTH_SHORT).show();
+
+            if (success == 0) {
+                finish();
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void showDatePicker(final Context context) {
@@ -142,6 +161,7 @@ public class LearngroupCreatorActivity extends AppCompatActivity implements Data
                 showTimePicker(v.getContext(), true);
             }
         });
+
 
         dialog.show();
     }
