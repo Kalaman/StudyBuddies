@@ -59,7 +59,12 @@ def createLearngroup():
     courseid = request.form['courseid']
 
     try:
-        meetingtimestamp = datetime.datetime.strptime(request.form['meetingtime'],'%Y-%m-%d %H:%M:%S')
+        meetingtimestampFrom = datetime.datetime.strptime(request.form['meetingTimeTo'],'%Y-%m-%d %H:%M:%S')
+    except ValueError as verr:
+        return jsonify({'success':1,'message':'Datumformat wurde nicht eingehalten'});
+
+    try:
+        meetingtimestampTo = datetime.datetime.strptime(request.form['meetingTimeFrom'],'%Y-%m-%d %H:%M:%S')
     except ValueError as verr:
         return jsonify({'success':1,'message':'Datumformat wurde nicht eingehalten'});
 
@@ -67,7 +72,7 @@ def createLearngroup():
     maxstudentcount = request.form['maxstudentcount']
 
     try:
-        cursor.execute("INSERT INTO Learngroup VALUES ('','%s','%s','%s','%s','%s','%s','%s')" % (creator,courseid,meetingtimestamp,meetingpointid,title,description,maxstudentcount))
+        cursor.execute("INSERT INTO Learngroup VALUES ('','%s','%s','%s','%s','%s','%s','%s')" % (creator,courseid,meetingtimestampFrom,meetingtimestampTo,meetingpointid,title,description,maxstudentcount))
         cursor.execute("INSERT INTO StudentLearngroup VALUES ('%s','%s')" % (creator,cursor.lastrowid))
         cnx.commit()
     except mysql.connector.Error as e:
